@@ -11,6 +11,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasher;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -21,8 +23,9 @@ class RegisterController extends AbstractController
 {
 
     #[Route('/register', name: 'register')]
-    public function new (\Symfony\Component\HttpFoundation\Request $request,  EntityManagerInterface $entityManager): Response
+    public function new (\Symfony\Component\HttpFoundation\Request $request,  EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
     {
+
         $user = new Registero();
         $form = $this->createForm(RegisterType::class, $user);
 
@@ -30,6 +33,9 @@ class RegisterController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             // $form->getData() holds the submitted values
             // but, the original `$task` variable has also been updated
+            $hashedPassword = $passwordHasher->hashPassword($user, $user->getPassword());
+            $user->setPassword($hashedPassword);
+
             $user = $form->getData();
 
             $entityManager->persist($user);

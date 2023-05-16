@@ -4,9 +4,13 @@ namespace App\Entity;
 
 use App\Repository\RegisteroRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Type;
+use Symfony\Component\Validator\Mapping\ClassMetadata;
+
 
 #[ORM\Entity(repositoryClass: RegisteroRepository::class)]
-class Registero
+class Registero implements \Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -76,5 +80,15 @@ class Registero
         $this->password = $password;
 
         return $this;
+    }
+
+    public static function loadValidatorMetadata(ClassMetadata $metadata): void
+    {
+        $metadata->addPropertyConstraint('username', new NotBlank());
+        $metadata->addPropertyConstraint('surname', new NotBlank());
+        $metadata->addPropertyConstraint('email', new  NotBlank());
+        $metadata->addPropertyConstraint('password', new NotBlank());
+
+
     }
 }
