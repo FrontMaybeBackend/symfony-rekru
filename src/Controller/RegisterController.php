@@ -3,6 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\Register;
+use App\Entity\Registero;
+use App\Form\RegisterType;
+use Doctrine\ORM\EntityManagerInterface;
 use http\Client\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -12,22 +15,29 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * @method createFormBuilder(Register $user)
+ * @method createFormBuilder(Registero $user)
  */
 class RegisterController extends AbstractController
 {
 
-  #[Route('register')]
-    public function new (\Symfony\Component\HttpFoundation\Request $request): Response
+    #[Route('/register', name: 'register')]
+    public function new (\Symfony\Component\HttpFoundation\Request $request,  EntityManagerInterface $entityManager): Response
     {
-        $user = new Register();
+        $user = new Registero();
+        $form = $this->createForm(RegisterType::class, $user);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            // $form->getData() holds the submitted values
+            // but, the original `$task` variable has also been updated
+            $user = $form->getData();
+
+            $entityManager->persist($user);
+            $entityManager->flush();
 
 
-        $form = $this->createFormBuilder($user)
-            ->add('username', TextType::class)
-            ->add('surname', TextType::class)
-            ->add('email',TextType::class)
-            ->add('save', SubmitType::class, ['label' => 'Register'])->getForm();
+            return $this->renderForm('register.html.twig');
+        }
 
         return $this->renderForm('base.html.twig', [
             'form' => $form,
