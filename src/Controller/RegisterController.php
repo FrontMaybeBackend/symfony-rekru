@@ -22,7 +22,7 @@ use Symfony\Component\HttpFoundation\Response;
 class RegisterController extends AbstractController
 {
 
-    #[Route('/register', name: 'register')]
+    #[Route('/register', name: 'app_register')]
     public function new (\Symfony\Component\HttpFoundation\Request $request,  EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
     {
 
