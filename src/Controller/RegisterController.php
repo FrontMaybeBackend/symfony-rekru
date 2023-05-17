@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Register;
 use App\Entity\Registero;
+use App\Entity\User;
 use App\Form\RegisterType;
 use Doctrine\ORM\EntityManagerInterface;
 use http\Client\Request;
@@ -26,7 +27,7 @@ class RegisterController extends AbstractController
     public function new (\Symfony\Component\HttpFoundation\Request $request,  EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
     {
 
-        $user = new Registero();
+        $user = new User();
         $form = $this->createForm(RegisterType::class, $user);
 
         $form->handleRequest($request);
@@ -42,10 +43,10 @@ class RegisterController extends AbstractController
             $entityManager->flush();
 
 
-            return $this->renderForm('register.html.twig');
+            return $this->renderForm('register/base.html.twig');
         }
 
-        return $this->renderForm('base.html.twig', [
+        return $this->renderForm('register/register.html.twig', [
             'form' => $form,
 
         ]);
