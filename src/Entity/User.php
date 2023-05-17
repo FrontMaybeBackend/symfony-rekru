@@ -4,10 +4,12 @@ namespace App\Entity;
 
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
@@ -151,7 +153,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public static function loadValidatorMetadata(ClassMetadata $metadata): void
     {
+
         $metadata->addPropertyConstraint('username', new NotBlank());
+        $metadata->addPropertyConstraint('username',new Assert\Length([
+            'min' => 2,
+            'max' => 15,
+            'minMessage' => 'Your first name must be at least {{ limit }} characters long',
+            'maxMessage' => 'Your first name cannot be longer than {{ limit }} characters']));
         $metadata->addPropertyConstraint('surname', new NotBlank());
         $metadata->addPropertyConstraint('email', new  NotBlank());
         $metadata->addPropertyConstraint('password', new NotBlank());

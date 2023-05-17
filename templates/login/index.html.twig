@@ -2,21 +2,21 @@
 
 {% block body %}
     {% if error %}
-        <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+        <div>{{ error.messageKey|trans(error.messageData, 'security') }} </div>
     {% endif %}
 
-    <div style="display: flex; justify-content: center; align-items: center; height: 100vh;">
-        <form action="{{ path('app_login') }}" method="post" style="width: 300px;">
+    <div id="form" >
+        <form action="{{ path('app_login') }}" method="post" >
             <label for="username">Username</label>
-            <input type="text" id="username" name="_username" value="{{ last_username }}" style="width: 100%; margin-bottom: 10px;"/>
+            <input type="text" id="username" name="_username" value="{{ last_username }}" />
 
             <label for="password">Password:</label>
-            <input type="password" id="password" name="_password" style="width: 100%; margin-bottom: 10px;"/>
+            <input type="password" id="password" name="_password" />
 
             {# If you want to control the URL the user is redirected to on success
         <input type="hidden" name="_target_path" value="/account"/> #}
 
-            <button type="submit" class="btn btn-info" style="width: 100%;">Login</button>
+            <button type="submit" class="btn btn-info" >Login</button>
         </form>
     </div>
 {% endblock %}

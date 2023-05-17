@@ -30,10 +30,10 @@ class RegisterController extends AbstractController
         $user = new User();
         $form = $this->createForm(RegisterType::class, $user);
 
+
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             // $form->getData() holds the submitted values
-            // but, the original `$task` variable has also been updated
             $hashedPassword = $passwordHasher->hashPassword($user, $user->getPassword());
             $user->setPassword($hashedPassword);
 

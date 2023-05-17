@@ -22,5 +22,3 @@ app_homepage:
             app_logout:
               path: /logout
               methods: GET
-              defaults:
-                _controller: 'App\Controller\HomeController::index'

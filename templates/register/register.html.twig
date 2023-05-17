@@ -1,7 +1,18 @@
 
 {% include 'home/index.html.twig' %}
 
-        {% block body %}
-            <h1>User Sign Up:</h1>
-            {{ form(form) }}
-        {% endblock %}
+      {% block body %}
+              <div id="form">
+                      {% if form.vars.errors|length > 0 %}
+                              <ul>
+                                      {% for error in form.vars.errors %}
+                                              <li>{{ error.message }}</li>
+                                      {% endfor %}
+                              </ul>
+                      {% endif %}
+
+                      {{ form_start(form) }}
+                      {{ form_widget(form) }}
+                      {{ form_end(form) }}
+              </div>
+      {% endblock %}
