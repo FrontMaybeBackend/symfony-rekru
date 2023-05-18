@@ -1,0 +1,38 @@
+
+
+
+{% include 'home/index.html.twig' %}
+
+
+{% block body %}
+
+
+    <div id="tasks">
+        <div class="form-container">
+            {{ form(form) }}
+        </div>
+        <h1>Tasks</h1>
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Name</th>
+                <th scope="col">Done</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for names in name %}
+                <tr>
+                    <th scope="row">{{ names.id }}</th>
+                    <td>{{ names.name }}</td>
+                    <td>
+                        <input type="checkbox" name="task[]" value="{{ names.id }}">
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <button class="btn btn-check"> Update</button>
+    </div>
+{% endblock %}

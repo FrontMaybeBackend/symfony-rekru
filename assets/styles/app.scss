@@ -10,6 +10,23 @@ body {
   align-items: center;
   height: 100vh;
 }
+
+
+table{
+  text-align: center;
+}
+
+.form-container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+  margin-top: 20px;
+
+}
+#tasks{
+  text-align: center;
+}
 form {
   width: 300px;
 

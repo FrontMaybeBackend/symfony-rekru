@@ -22,3 +22,13 @@ app_homepage:
             app_logout:
               path: /logout
               methods: GET
+
+
+              app_todo:
+                path: /
+                defaults:
+                  _controller: 'App\Controller\TodoController::index'
+
+
+
+
