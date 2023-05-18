@@ -1,5 +1,6 @@
 <?php
 
+
 namespace App\Form;
 
 use Symfony\Component\Form\AbstractType;
@@ -14,14 +15,20 @@ class TodoType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name', TextType::class,[
-                'label'=> 'name',
-                'row_attr'=> [
-                    'class'=>'input-group',
+            ->add('todoName', TextType::class, [
+                'label' => 'Todo Name',
+                'row_attr' => [
+                    'class' => 'input-group',
                 ],
             ])
-            ->add('AddTask', SubmitType::class)
-            ;
+            ->add('task', TextType::class, [
+                'label' => 'Task',
+                'row_attr' => [
+                    'class' => 'input-group',
+                ],
+            ])
+            ->add('AddTask', SubmitType::class);
     }
+
 
 }

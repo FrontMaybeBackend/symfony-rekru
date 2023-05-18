@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Todo;
+use App\Entity\TodoList;
 use App\Form\TodoType;
 use App\Repository\TodoItemRepository;
 use App\Repository\TodoRepository;
@@ -18,20 +19,28 @@ class TodoController extends AbstractController
     #[Route('/todo', name: 'app_todo')]
     public function new(Request $request, EntityManagerInterface $entityManager, ManagerRegistry $doctrine): Response
     {
-         $task = new Todo();
-         $form = $this->createForm(TodoType::class, $task);
 
-         $form->handleRequest($request);
+        $user = $this->getUser();// pobierz użytkownika z bazy danych lub innego źródła
+        $form = $this->createForm(TodoType::class);
+        $form->handleRequest($request);
 
-         if($form->isSubmitted() && $form->isValid()){
-             $task = $form->getData();
+        if ($form->isSubmitted() && $form->isValid()) {
+            $todo = new Todo();
+            $todo->setName($form->get('todoName')->getData());
 
-             $entityManager->persist($task);
-             $entityManager->flush();
+            $todoList = new TodoList();
+            $todoList->setUser($user);
+            $todoList->setTask($form->get('task')->getData());
+            $todoList->setTodo($todo);
 
-             return $this->redirectToRoute('app_todo');
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($todo);
+            $entityManager->persist($todoList);
+            $entityManager->flush();
 
-         }
+            return $this->redirectToRoute('app_todo');
+
+        }
 
         $task = $doctrine->getRepository(Todo::class)->findAll();
 

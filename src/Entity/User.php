@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -31,11 +33,20 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private array $roles = [];
 
+
     /**
      * @var string The hashed password
      */
     #[ORM\Column]
     private ?string $password = null;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: TodoList::class)]
+    private Collection $todolist;
+
+    public function __construct()
+    {
+        $this->todolist = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -166,4 +177,45 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
 
     }
+
+    /**
+     * @return Collection<int, TodoList>
+     */
+    public function getTodolist(): Collection
+    {
+        return $this->todolist;
+    }
+
+    public function addTodolist(TodoList $todolist): self
+    {
+        if (!$this->todolist->contains($todolist)) {
+            $this->todolist->add($todolist);
+            $todolist->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTodolist(TodoList $todolist): self
+    {
+        if ($this->todolist->removeElement($todolist)) {
+            // set the owning side to null (unless already changed)
+            if ($todolist->getUser() === $this) {
+                $todolist->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function addTodo(Todolist $todolist): self
+    {
+        if (!$this->todolist->contains($todolist)) {
+            $this->todolist->add($todolist);
+            $todolist->setUser($this);
+        }
+
+        return $this;
+    }
+
 }

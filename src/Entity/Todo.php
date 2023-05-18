@@ -18,20 +18,14 @@ class Todo
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[ORM\OneToMany(mappedBy: 'name', targetEntity: TodoItem::class)]
-    private Collection $tasks;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="todoLists")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $user;
-
+    #[ORM\OneToMany(mappedBy: 'todo', targetEntity: TodoList::class)]
+    private Collection $todolist;
 
     public function __construct()
     {
-        $this->tasks = new ArrayCollection();
+        $this->todolist = new ArrayCollection();
     }
+
 
     public function getId(): ?int
     {
@@ -50,33 +44,28 @@ class Todo
         return $this;
     }
 
-    /**
-     * @return Collection<int, TodoItem>
-     */
-    public function getTasks(): Collection
+    public function addTodolist(TodoList $todolist): self
     {
-        return $this->tasks;
-    }
-
-    public function addTask(TodoItem $task): self
-    {
-        if (!$this->tasks->contains($task)) {
-            $this->tasks->add($task);
-            $task->setName($this);
+        if (!$this->todolist->contains($todolist)) {
+            $this->todolist->add($todolist);
+            $todolist->setTodo($this);
         }
 
         return $this;
     }
 
-    public function removeTask(TodoItem $task): self
+    public function removeTodolist(TodoList $todolist): self
     {
-        if ($this->tasks->removeElement($task)) {
+        if ($this->todolist->removeElement($todolist)) {
             // set the owning side to null (unless already changed)
-            if ($task->getName() === $this) {
-                $task->setName(null);
+            if ($todolist->getTodo() === $this) {
+                $todolist->setTodo(null);
             }
         }
 
         return $this;
     }
+
+
+
 }

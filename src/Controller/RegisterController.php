@@ -18,7 +18,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * @method createFormBuilder(Registero $user)
+ * @method createFormBuilder(RegisterType $user)
  */
 class RegisterController extends AbstractController
 {
@@ -43,7 +43,7 @@ class RegisterController extends AbstractController
             $entityManager->flush();
 
 
-            return $this->renderForm('register/base.html.twig');
+            return $this->redirectToRoute('app_homepage');
         }
 
         return $this->renderForm('register/register.html.twig', [
