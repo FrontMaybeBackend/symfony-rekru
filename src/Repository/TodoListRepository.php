@@ -39,6 +39,15 @@ class TodoListRepository extends ServiceEntityRepository
         }
     }
 
+    public function findTodosForUser($userId)
+    {
+        return $this->createQueryBuilder('tl')
+            ->andWhere('tl.user = :userId')
+            ->setParameter('userId', $userId)
+            ->getQuery()
+            ->getResult();
+    }
+
 //    /**
 //     * @return TodoList[] Returns an array of TodoList objects
 //     */

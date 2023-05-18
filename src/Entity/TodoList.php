@@ -22,7 +22,7 @@ class TodoList
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
 
-    #[ORM\ManyToOne(inversedBy: 'todoname')]
+    #[ORM\ManyToOne(inversedBy: 'todolist')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Todo $todo = null;
 
@@ -77,5 +77,11 @@ class TodoList
     public function getTodo(): ?Todo
     {
         return $this->todo;
+    }
+    public function setName(string $name): self
+    {
+        $this->name = $name;
+
+        return $this;
     }
 }

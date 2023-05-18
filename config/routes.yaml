@@ -29,6 +29,13 @@ app_homepage:
                 defaults:
                   _controller: 'App\Controller\TodoController::index'
 
+                  names_details:
+                    path: /{name}
+                    defaults:
+                      _controller: 'App\Controller\TodoController::todoDetails'
+
+
+
 
 
 

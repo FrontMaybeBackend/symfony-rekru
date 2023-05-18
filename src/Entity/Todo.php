@@ -66,6 +66,13 @@ class Todo
         return $this;
     }
 
+    /**
+     * @return Collection
+     */
+    public function getTodolist(): Collection
+    {
+        return $this->todolist;
+    }
 
 
 }

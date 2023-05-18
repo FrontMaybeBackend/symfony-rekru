@@ -34,6 +34,12 @@
             {% endfor %}
             </tbody>
         </table>
-        <button class="btn btn-check"> Update</button>
+        <ul>
+            {% for names in name %}
+                <li>
+                    <a href="{{ path('names_details', { 'id': names.getId() }) }}">{{ names.getName() }}</a>
+                </li>
+            {% endfor %}
+        </ul>
     </div>
 {% endblock %}

@@ -53,7 +53,27 @@ class TodoController extends AbstractController
 
     }
 
+#[Route('/tasks',name: 'names_details')]
+public function todoDetails(Request $request, TodoRepository $todoRepository)
+{
+    $todoId = $request->query->get('id');
+    $user = $this->getUser();
 
+    // Pobierz obiekt Todo na podstawie ID
+    $todo = $todoRepository->find($todoId);
+
+    if (!$todo) {
+        throw $this->createNotFoundException('Nie znaleziono zadania o podanym ID.');
+    }
+
+    // Pobierz listę TodoList przypisanych do danego Todo dla zalogowanego użytkownika
+    $todoLists = $todo->getTodolist();
+
+    return $this->render('todo/names_details.html.twig', [
+        'todo' => $todo,
+        'todoLists' => $todoLists,
+    ]);
+}
 
 
 }
