@@ -1,12 +1,37 @@
 
 {% include 'home/index.html.twig' %}
-<h1> {{ todo.getName() }}</h1>
 
-
-<h2>Tasks</h2>
-<ul>
-    {% for todoList in todoLists %}
-        <li>{{ todoList.task }}</li>
-    {% endfor %}
+<div id="tasks">
+    <h1> {{ todo.getName() }}</h1>
+<div  class="form-container">
      {{ form(form) }}
-</ul>
+</div>
+
+
+<form method="post">
+</div>
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">Task</th>
+            <th scope="col">Done</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for todoList in todoLists %}
+            <tr>
+                <td>
+                    {{ todoList.task }}
+                </td>
+                <td>
+                    <input type="checkbox" name="task[]" value="{{ todoList.id }}" {% if todoList.done %}checked{% endif %}>
+                </td>
+                <td>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+<button class="btn btn-dark" style="width: 25%">update</button>
+</form>
+

@@ -195,9 +195,26 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             'max' => 15,
             'minMessage' => 'Your first name must be at least {{ limit }} characters long',
             'maxMessage' => 'Your first name cannot be longer than {{ limit }} characters']));
-        $metadata->addPropertyConstraint('surname', new NotBlank());
+        $metadata->addConstraint(new UniqueEntity([
+            'fields' => 'username',
+        ]));
+
+        $metadata->addConstraint(new UniqueEntity([
+            'fields' => 'email',
+        ]));
+        $metadata->addPropertyConstraint('email', new Assert\Email());
         $metadata->addPropertyConstraint('email', new  NotBlank());
+
+
+        $metadata->addPropertyConstraint('surname', new NotBlank());
+
+
         $metadata->addPropertyConstraint('password', new NotBlank());
+        $metadata->addPropertyConstraint('password',new Assert\Length([
+            'min' => 4,
+            'max' => 12,
+            'minMessage' => 'Your first name must be at least {{ limit }} characters long',
+            'maxMessage' => 'Your first name cannot be longer than {{ limit }} characters']));
 
 
     }

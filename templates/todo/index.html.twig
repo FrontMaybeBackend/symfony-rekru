@@ -18,7 +18,6 @@
             <tr>
                 <th scope="col">Id</th>
                 <th scope="col">Name</th>
-                <th scope="col">Done</th>
             </tr>
             </thead>
             <tbody>
@@ -27,11 +26,10 @@
                 <tr>
                     <th scope="row">{{ names.id }}</th>
                     <td>
-
                         <a href="{{ path('names_details', { 'id': names.getId() }) }}">{{ names.getName() }}</a>
                     </td>
                     <td>
-                        <input type="checkbox" name="task[]" value="{{ names.id }}">
+
                     </td>
                 </tr>
             {% endfor %}

@@ -18,7 +18,11 @@ class TodoListType extends  AbstractType
                     'class' => 'input-group',
                 ],
             ])
-            ->add('AddTask', SubmitType::class);
+            ->add('AddTask', SubmitType::class,[
+                'attr' => [
+                    'class' => 'btn-dark',
+                ],
+            ]);
     }
 
 }

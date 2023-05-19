@@ -1,12 +1,18 @@
 {% include 'home/index.html.twig' %}
 
 {% block body %}
-    {% if error %}
-        <div>{{ error.messageKey|trans(error.messageData, 'security') }} </div>
-    {% endif %}
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">
+            {{ message }}
+        </div>
+    {% endfor %}
 
     <div id="form" >
+
         <form action="{{ path('app_login') }}" method="post" >
+            {% if error %}
+                <div class="text-danger">{{ error.messageKey|trans(error.messageData, 'security') }} </div>
+            {% endif %}
             <label for="username">Username</label>
             <input type="text" id="username" name="_username" value="{{ last_username }}" />
 
@@ -16,7 +22,7 @@
             {# If you want to control the URL the user is redirected to on success
         <input type="hidden" name="_target_path" value="/account"/> #}
 
-            <button type="submit" class="btn btn-info" >Login</button>
+            <button type="submit" class="btn btn-dark" >Login</button>
         </form>
     </div>
 {% endblock %}

@@ -7,6 +7,7 @@ use App\Entity\TodoList;
 use App\Form\TodoListType;
 use App\Form\TodoType;
 use App\Repository\TodoItemRepository;
+use App\Repository\TodoListRepository;
 use App\Repository\TodoRepository;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
@@ -89,12 +90,39 @@ public function todoDetails(Request $request, TodoRepository $todoRepository, En
         return $this->redirectToRoute('names_details', ['id' => $todoId]);
     }
 
+    // Ustaw pole done na true lub false po wyslaniu form
+    if($request->isMethod('POST')) {
+        $taskIds = $request->request->get('task');
+        if (is_array($taskIds)) {
+            foreach ($todoLists as $todoList) {
+                // Sprawdź, czy ID zadania znajduje się w tablicy zaznaczonych zadań
+                $taskId = $todoList->getId();
+                $taskIsDone = in_array($taskId, $taskIds);
+
+                // Zaktualizuj pole "done" dla zadanego zadania
+                $todoList->setDone($taskIsDone);
+
+                //Jesli jest true to usun z bazy i zaaktualizuj.
+                if($todoList->isDone(true)){
+                    $entityManager->remove($todoList);
+                    $entityManager->flush();
+                }
+
+            }
+
+            // Zapisz zmiany w bazie danych
+            $entityManager->flush();
+        }
+    }
+
     return $this->render('todo/names_details.html.twig', [
         'todo' => $todo,
         'todoLists' => $todoLists,
         'form' => $taskForm->createView(),
     ]);
 }
+
+
 }
 
 

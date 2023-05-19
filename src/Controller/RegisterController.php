@@ -43,7 +43,7 @@ class RegisterController extends AbstractController
             $entityManager->flush();
 
 
-            return $this->redirectToRoute('app_homepage');
+            return $this->redirectToRoute('app_login', ['registration_success' => true]);
         }
 
         return $this->renderForm('register/register.html.twig', [

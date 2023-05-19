@@ -39,7 +39,11 @@ class RegisterType extends AbstractType
                     'class' => 'input-group',
                     ],
             ])
-            ->add('save', SubmitType::class)
+            ->add('save', SubmitType::class,[
+                'attr' => [
+                    'class' => 'btn-dark',
+                ],
+            ])
         ;
     }
 

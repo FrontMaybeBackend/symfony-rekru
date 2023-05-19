@@ -4,6 +4,9 @@ namespace App\Entity;
 
 use App\Repository\TodoListRepository;
 use Doctrine\ORM\Mapping as ORM;
+use phpDocumentor\Reflection\Types\Boolean;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Mapping\ClassMetadata;
 
 #[ORM\Entity(repositoryClass: TodoListRepository::class)]
 class TodoList
@@ -17,6 +20,10 @@ class TodoList
     #[ORM\Column]
     private ?string $task = null;
 
+    #[ORM\Column]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?bool $done = false;
+
 
     #[ORM\ManyToOne(inversedBy: 'todolist')]
     #[ORM\JoinColumn(nullable: false)]
@@ -27,6 +34,8 @@ class TodoList
     private ?Todo $todo = null;
 
 
+
+
     /**
      * @return mixed
      */
@@ -34,6 +43,23 @@ class TodoList
     /**
      * @return string|null
      */
+
+    /**
+     * @param bool $done
+     */
+    public function setDone(bool $done): void
+    {
+        $this->done = $done;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isDone(): bool
+    {
+        return $this->done;
+    }
+
     public function getTask(): ?string
     {
         return $this->task;
@@ -83,5 +109,10 @@ class TodoList
         $this->name = $name;
 
         return $this;
+    }
+
+    public static function loadValidatorMetadata(ClassMetadata $metadata): void
+    {
+        $metadata->addPropertyConstraint('task', new NotBlank());
     }
 }
