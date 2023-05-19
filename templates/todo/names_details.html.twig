@@ -1,11 +1,12 @@
 
 {% include 'home/index.html.twig' %}
-<h1>{{ todo.getName() }}</h1>
+<h1> {{ todo.getName() }}</h1>
 
 
-<h2>Tasks:</h2>
+<h2>Tasks</h2>
 <ul>
     {% for todoList in todoLists %}
         <li>{{ todoList.task }}</li>
     {% endfor %}
+     {{ form(form) }}
 </ul>

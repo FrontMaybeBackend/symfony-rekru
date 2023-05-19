@@ -6,6 +6,8 @@ use App\Repository\TodoRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Mapping\ClassMetadata;
 
 #[ORM\Entity(repositoryClass: TodoRepository::class)]
 class Todo
@@ -21,6 +23,10 @@ class Todo
     #[ORM\OneToMany(mappedBy: 'todo', targetEntity: TodoList::class)]
     private Collection $todolist;
 
+    #[ORM\ManyToOne(inversedBy: 'todo')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $user = null;
+
     public function __construct()
     {
         $this->todolist = new ArrayCollection();
@@ -30,6 +36,17 @@ class Todo
     public function getId(): ?int
     {
         return $this->id;
+    }
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
+
+        return $this;
     }
 
     public function getName(): ?string
@@ -74,5 +91,10 @@ class Todo
         return $this->todolist;
     }
 
+    public static function loadValidatorMetadata(ClassMetadata $metadata): void
+    {
+        $metadata->addPropertyConstraint('todoName', new NotBlank());
+
+    }
 
 }

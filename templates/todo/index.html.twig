@@ -11,7 +11,7 @@
         <div class="form-container">
             {{ form(form) }}
         </div>
-        <h1>Tasks</h1>
+        <h1>All todos List</h1>
 
         <table class="table">
             <thead>
@@ -26,7 +26,10 @@
             {% for names in name %}
                 <tr>
                     <th scope="row">{{ names.id }}</th>
-                    <td>{{ names.name }}</td>
+                    <td>
+
+                        <a href="{{ path('names_details', { 'id': names.getId() }) }}">{{ names.getName() }}</a>
+                    </td>
                     <td>
                         <input type="checkbox" name="task[]" value="{{ names.id }}">
                     </td>
@@ -34,12 +37,5 @@
             {% endfor %}
             </tbody>
         </table>
-        <ul>
-            {% for names in name %}
-                <li>
-                    <a href="{{ path('names_details', { 'id': names.getId() }) }}">{{ names.getName() }}</a>
-                </li>
-            {% endfor %}
-        </ul>
     </div>
 {% endblock %}

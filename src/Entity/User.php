@@ -43,11 +43,28 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: TodoList::class)]
     private Collection $todolist;
 
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Todo::class)]
+    private Collection $todo;
     public function __construct()
     {
         $this->todolist = new ArrayCollection();
     }
 
+    /**
+     * @return Collection
+     */
+    public function getTodo(): Collection
+    {
+        return $this->todo;
+    }
+
+    /**
+     * @param Collection $todo
+     */
+    public function setTodo(Collection $todo): void
+    {
+        $this->todo = $todo;
+    }
     /**
      * @param int|null $id
      */
@@ -223,6 +240,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         return $this;
+    }
+
+    /**
+     * @param Collection $todolist
+     */
+    public function setTodolist(Collection $todolist): void
+    {
+        $this->todolist = $todolist;
     }
 
 }

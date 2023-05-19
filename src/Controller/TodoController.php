@@ -4,9 +4,11 @@ namespace App\Controller;
 
 use App\Entity\Todo;
 use App\Entity\TodoList;
+use App\Form\TodoListType;
 use App\Form\TodoType;
 use App\Repository\TodoItemRepository;
 use App\Repository\TodoRepository;
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -26,35 +28,38 @@ class TodoController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $todo = new Todo();
+            $todo->setUser($user);
             $todo->setName($form->get('todoName')->getData());
 
-            $todoList = new TodoList();
-            $todoList->setUser($user);
-            $todoList->setTask($form->get('task')->getData());
-            $todoList->setTodo($todo);
 
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($todo);
-            $entityManager->persist($todoList);
             $entityManager->flush();
+
 
             return $this->redirectToRoute('app_todo');
 
         }
 
-        $task = $doctrine->getRepository(Todo::class)->findAll();
+        if ($this->isGranted('ROLE_USER')) {
+            $task = $doctrine->getRepository(Todo::class)->findBy(['user' => $user]);
 
-        // Renderuj widok index.html.twig, przekazując formularz i zadania
-        return $this->renderForm('todo/index.html.twig', [
-            'form' => $form,
-            'name' => $task,
-        ]);
+
+            // Renderuj widok index.html.twig, przekazując formularz i zadania
+            return $this->renderForm('todo/index.html.twig', [
+                'form' => $form,
+                'name' => $task,
+            ]);
+
+        }else{
+            return $this->redirectToRoute('app_login');
+        }
 
 
     }
 
 #[Route('/tasks',name: 'names_details')]
-public function todoDetails(Request $request, TodoRepository $todoRepository)
+public function todoDetails(Request $request, TodoRepository $todoRepository, EntityManagerInterface $entityManager)
 {
     $todoId = $request->query->get('id');
     $user = $this->getUser();
@@ -69,11 +74,27 @@ public function todoDetails(Request $request, TodoRepository $todoRepository)
     // Pobierz listę TodoList przypisanych do danego Todo dla zalogowanego użytkownika
     $todoLists = $todo->getTodolist();
 
+    //Utwórz formularz aby dodać nowego taska do Listy
+    $task = new TodoList();
+    $taskForm = $this->createForm(TodoListType::class, $task);
+    $taskForm->handleRequest($request);
+
+
+    if ($taskForm->isSubmitted() && $taskForm->isValid()) {
+        $task->setUser($user);
+        $task->setTodo($todo);
+        $entityManager->persist($task);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('names_details', ['id' => $todoId]);
+    }
+
     return $this->render('todo/names_details.html.twig', [
         'todo' => $todo,
         'todoLists' => $todoLists,
+        'form' => $taskForm->createView(),
     ]);
 }
-
-
 }
+
+
